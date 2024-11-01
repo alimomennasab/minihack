@@ -4,12 +4,12 @@ import React from 'react';
 const RecipeWindow = () => {
   return (
     <div className='min-h-screen h-screen w-screen flex items-center justify-center'>
-        <div className="bg-ng w-2/6 h-3/4 rounded-3xl border-2">
-            <div className="mt-4 text-3xl font-bold text-white text-center">
+        <div className="bg-white w-2/6 h-3/4 border-black rounded-3xl border-2">
+            <div className="mt-4 text-3xl font-bold text-center text-black">
                 Recipe Name
             </div>
-            <div className="bg-tan mt-4 mx-10 rounded-3xl border-2 overflow-scroll h-4/6">
-                <div className='mt-2 mx-4'>
+            <div className="mt-4 mx-10 bg-white border-black rounded-3xl border-2 overflow-scroll h-4/6">
+                <div className='mt-2 mx-4 text-black'>
                     The quick brown fox jumped over the lazy dog. The quick brown fox jumped over the lazy dog.
                 </div>
             </div>
