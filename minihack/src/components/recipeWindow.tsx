@@ -1,5 +1,5 @@
+"use client";
 import React from 'react';
-import { Button } from '@mui/material';
 
 const RecipeWindow = () => {
   return (
@@ -14,9 +14,9 @@ const RecipeWindow = () => {
                 </div>
             </div>
             <div className="flex items-center justify-center mt-10">
-                <Button variant="contained" color="success">
+                <button className='bg-dg rounded-lg p-2 text-white w-1/2'>
                     Copy Recipe
-                </Button> 
+                </button>
             </div>
                    
         </div>
