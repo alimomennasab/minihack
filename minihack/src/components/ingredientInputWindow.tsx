@@ -3,7 +3,6 @@ import React from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 
-
 const IngredientInputWindow = () => {
   return (
     <div className='min-h-screen h-screen w-screen flex items-center justify-center'>
