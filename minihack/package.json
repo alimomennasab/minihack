@@ -12,6 +12,9 @@
     "@google/generative-ai": "^0.21.0",
     "dotenv": "^16.4.5",
     "minihack": "file:",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.6",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028"
