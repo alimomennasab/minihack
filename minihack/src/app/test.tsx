@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 "use client";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -23,7 +24,7 @@ export default function Test() {
         };
 
         getResponse();
-    }, [prompt])
+    }, [model, prompt])
 
     return(<>
         <input style={{ border: '2px solid black'}} onChange={(e) => setPrompt("Explain what recipes we can make with " +  e.target.value + "and can output the recipes in the format food (not in a list): {instructions in numbered list form}")} placeholder="PUT SUM SHIT HERE"></input>

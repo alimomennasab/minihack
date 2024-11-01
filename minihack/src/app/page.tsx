@@ -1,3 +1,4 @@
+"use client";
 import RecipeWindow from '@/components/recipeWindow';
 import IngredientInputWindow from '../components/ingredientInputWindow';
 import RecipeBox from '@/components/recipeBox';
@@ -7,7 +8,6 @@ export default function Page() {
     <main>
       <RecipeBox />
       <RecipeWindow />
-      <IngredientInputWindow />
     </main>
   );
 }
