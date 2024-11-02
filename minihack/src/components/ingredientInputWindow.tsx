@@ -19,10 +19,12 @@ const IngredientInputWindow = () => {
   const [res, setRes] = useState("");
   const [prompt, setPrompt] = useState("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(false);
+  const [counter, setCounter] = useState(0);
+  const [count2, setCount] = useState(0);
 
   const inputOpen = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center', 'justify-center', 'bg-dg'];
-  const inputClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center','justify-center', 'bg-dg hidden'];
+  const inputClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center','justify-center', 'bg-dg', 'hidden'];
   const gridOpen = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'flex-col','items-center', 'justify-center', 'bg-[#465B43]'];
   const gridClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'flex-col', 'items-center', 'justify-center', 'bg-[#465B43]', 'hidden'];
 
@@ -52,26 +54,41 @@ const IngredientInputWindow = () => {
   }, [prompt]);
 
   useEffect(() => {
-    if (toggle == true) {
-      for (let i = 0; i < inputOpen.length; i++) {
-        document.getElementById("input-window")?.classList.remove(inputOpen[i]);
-      }
+    if (counter == 0) {
+
+    } else if (toggle == true) {
+        for (let i = 0; i < inputOpen.length; i++) {
+          document.getElementById("input-window")?.classList.remove(inputOpen[i]);
+        }
+        for (let i = 0; i < inputClose.length; i++) {
+          document.getElementById("input-window")?.classList.add(inputClose[i]);
+        }
+        for (let i = 0; i < gridClose.length; i++) {
+          document.getElementById("grid-window")?.classList.remove(gridClose[i]);
+        }
+        for (let i = 0; i < gridOpen.length; i++) {
+          document.getElementById("input-window")?.classList.remove(gridOpen[i]);
+        }
+    } else {
       for (let i = 0; i < inputClose.length; i++) {
-        document.getElementById("input-window")?.classList.add(inputClose[i]);
+        document.getElementById("input-window")?.classList.remove(inputClose[i]);
       }
-      for (let i = 0; i < gridClose.length; i++) {
-        document.getElementById("grid-window")?.classList.remove(gridClose[i]);
+      for (let i = 0; i < inputOpen.length; i++) {
+        document.getElementById("input-window")?.classList.add(inputOpen[i]);
       }
       for (let i = 0; i < gridOpen.length; i++) {
-        document.getElementById("input-window")?.classList.remove(gridOpen[i]);
+        document.getElementById("grid-window")?.classList.remove(gridOpen[i]);
       }
-    } else {
-      document.getElementById("input-window")?.classList.remove(inputClose);
-      document.getElementById("input-window")?.classList.add(inputOpen);
-      document.getElementById("grid-window")?.classList.remove(gridOpen);
-      document.getElementById("grid-window")?.classList.add(gridClose);
+      for (let i = 0; i < gridClose.length; i++) {
+        document.getElementById("input-window")?.classList.remove(gridClose[i]);
+      }
+      setCount(count2+1)
     }
-  }, [toggle])
+  }, [toggle, counter])
+
+  useEffect(() => {
+    setCounter(counter + 1);
+  }, [count2])
 
   function setStuff() {
     setPrompt(
