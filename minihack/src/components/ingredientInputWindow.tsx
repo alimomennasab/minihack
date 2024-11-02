@@ -1,26 +1,26 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
-import{ useState } from 'react';
-import { spec } from 'node:test/reporters';
 
-const IngredientInputWindow = () => {
+interface IngredientInputProps {
+  onGenerateRecipes: (ingredients: string, meal: string, special: string) => void;
+}
+
+const IngredientInputWindow: React.FC<IngredientInputProps> = ({ onGenerateRecipes }) => {
   const [ingredients, setIngredients] = useState("");
   const [meal, setMeal] = useState("");
   const [special, setSpecial] = useState("");
 
-  useEffect(() => {
-    console.log(ingredients + " " + meal + " " + special)
-  }, [meal, ingredients, special])
+  const handleGenerateRecipes = () => {
+    onGenerateRecipes(ingredients, meal, special);
+  };
 
   return (
     <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg'>
       <div className="bg-ng w-2/6 h-3/4 rounded-3xl flex flex-col justify-start">
-
-        {/*Ingredient input*/}
-        <div className='flex flex-col items-center justify-center space-y-4  p-4'>
+        <div className='flex flex-col items-center justify-center space-y-4 p-4'>
           <div className="mt-6 font-bold text-3xl text-white">
             Cookin It Up!
           </div>
@@ -34,8 +34,6 @@ const IngredientInputWindow = () => {
             onChange={(e) => setIngredients(e.target.value)}
           />
         </div>
-        
-        {/*Time of day input*/}
         <div className='flex flex-col items-center justify-center space-y-4 p-4'>
           <div className="flex justify-center items-center text-white text-lg">
             When do you want to eat?
@@ -46,8 +44,6 @@ const IngredientInputWindow = () => {
             <Button color="success" onClick={() => setMeal("dinner")}>Dinner</Button>
           </ButtonGroup>
         </div>
-        
-        {/*Additional customization input*/}
         <div className='flex flex-col items-center justify-center space-y-4 p-4'>
           <div className="flex justify-center items-center text-white text-lg">
             Anything you're craving?
@@ -59,13 +55,14 @@ const IngredientInputWindow = () => {
             onChange={(e) => setSpecial(e.target.value)}
           />
         </div>
-
-        {/*Generate recipes button*/}
         <div className='flex flex-col items-center justify-center space-y-4 p-4'>
-          <button className='bg-dg rounded-lg p-2 text-white w-1/2'>
+          <button 
+            className='bg-dg rounded-lg p-2 text-white w-1/2'
+            onClick={handleGenerateRecipes}
+          >
             Generate Recipes
           </button>
-          </div>
+        </div>
       </div>
     </div>
   );
