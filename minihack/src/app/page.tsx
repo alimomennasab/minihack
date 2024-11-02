@@ -35,11 +35,13 @@ export default function Page() {
       if (instructions.length > 0 && recipeTitles[index]) {
         recipes.push({
           name: recipeTitles[index],
-          ingredients: [], // You'll need to modify this based on your needs
+          ingredients: [],
           instructions: instructions.join('\n')
         });
       }
     });
+
+    console.log("Recipes: " + recipes)
     return recipes;
   };
 
