@@ -7,6 +7,7 @@ import{ useState } from 'react';
 import { spec } from 'node:test/reporters';
 import RecipeGrid from "./recipeGrid";
 
+
 const IngredientInputWindow = () => {
   const [ingredients, setIngredients] = useState("");
   const [meal, setMeal] = useState("");
@@ -19,10 +20,6 @@ const IngredientInputWindow = () => {
   useEffect(() => {
     console.log(ingredients + " " + meal + " " + special)
   }, [meal, ingredients, special])
-
-  const print =() =>{
-    console.log("hi");
-  }
 
   return (
     <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg'>
