@@ -10,6 +10,7 @@ export default function Page() {
       <RecipeGrid />
       <RecipeBox />
       <RecipeWindow />
+      <IngredientInputWindow />
     </main>
   );
 }
