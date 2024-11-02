@@ -7,10 +7,8 @@ import RecipeBox from '@/components/recipeBox';
 export default function Page() {
   return (
     <main>
-      <RecipeGrid />
-      <RecipeBox />
-      <RecipeWindow />
       <IngredientInputWindow />
+      
     </main>
   );
 }

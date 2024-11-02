@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client"
 import React from 'react';
 import RecipeBox from './recipeBox';
 
@@ -12,7 +13,7 @@ const ingredients = ['chicken', 'rice', 'tomatoes', 'stuff', 'things', 'test', '
 
 const RecipeGrid = () => {
   return (
-    <div className='min-h-screen h-screen w-screen flex flex-col items-center justify-center bg-[#465B43]'>
+    <div className='min-h-screen h-screen w-screen flex flex-col items-center justify-center bg-[#465B43] hidden' id='grid-window'>
       {/* Title & Ingredients list */}
       <div className='text-white text-5xl mb-4'>
         Generated Recipes

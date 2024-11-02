@@ -5,18 +5,117 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import{ useState } from 'react';
 import { spec } from 'node:test/reporters';
+import RecipeGrid from './recipeGrid'
+
+interface Recipe {
+  name: string;
+  instructions: string[];
+}
 
 const IngredientInputWindow = () => {
   const [ingredients, setIngredients] = useState("");
   const [meal, setMeal] = useState("");
   const [special, setSpecial] = useState("");
+  const [res, setRes] = useState("");
+  const [prompt, setPrompt] = useState("");
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [toggle, setToggle] = useState(true);
+
+  const inputOpen = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center', 'justify-center', 'bg-dg'];
+  const inputClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center','justify-center', 'bg-dg hidden'];
+  const gridOpen = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'flex-col','items-center', 'justify-center', 'bg-[#465B43]'];
+  const gridClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'flex-col', 'items-center', 'justify-center', 'bg-[#465B43]', 'hidden'];
+
+  const { GoogleGenerativeAI } = require("@google/generative-ai");
+  const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_AI_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   useEffect(() => {
     console.log(ingredients + " " + meal + " " + special)
   }, [meal, ingredients, special])
 
-  return (
-    <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg'>
+  useEffect(() => {
+    console.log("YOUR MOM")
+    const getResponse = async () => {
+      try {
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        console.log("Raw response:", text); // Debug output
+        setRes(text);
+        const parsedRecipes = parseRecipes(text);
+        setRecipes(parsedRecipes);
+      } catch (error) {
+        console.log("THERES A FUCKING ERROR: ", error);
+      }
+    };
+    getResponse();
+  }, [prompt]);
+
+  useEffect(() => {
+    if (toggle == true) {
+      for (let i = 0; i < inputOpen.length; i++) {
+        document.getElementById("input-window")?.classList.remove(inputOpen[i]);
+      }
+      for (let i = 0; i < inputClose.length; i++) {
+        document.getElementById("input-window")?.classList.add(inputClose[i]);
+      }
+      for (let i = 0; i < gridClose.length; i++) {
+        document.getElementById("grid-window")?.classList.remove(gridClose[i]);
+      }
+      for (let i = 0; i < gridOpen.length; i++) {
+        document.getElementById("input-window")?.classList.remove(gridOpen[i]);
+      }
+    } else {
+      document.getElementById("input-window")?.classList.remove(inputClose);
+      document.getElementById("input-window")?.classList.add(inputOpen);
+      document.getElementById("grid-window")?.classList.remove(gridOpen);
+      document.getElementById("grid-window")?.classList.add(gridClose);
+    }
+  }, [toggle])
+
+  function setStuff() {
+    setPrompt(
+      `Explain what ${special} ${meal} recipes we can make with ${ingredients} and can output the recipes in the format food (not in a list): {instructions in numbered list form}. Do not say anything else besides the formatted`
+    );
+    setToggle(!toggle);
+  }
+
+  const parseRecipes = (text: string): Recipe[] => {
+    // Split the text into sections by recipe titles
+    const recipeSections = text.split(/\*\*[^*]+:\*\*/);
+    // First element will be empty or contain any text before the first recipe
+    recipeSections.shift();
+    
+    // Get all recipe titles
+    const recipeTitles: string[] = [];
+    text.match(/\*\*([^*]+):\*\*/g)?.forEach(title => {
+      recipeTitles.push(title.replace(/\*\*/g, '').replace(':', ''));
+    });
+
+    const recipes: Recipe[] = [];
+
+    recipeSections.forEach((section, index) => {
+      const instructions = section
+        .trim()
+        .split('\n')
+        .map(instruction => instruction.trim())
+        .filter(instruction => instruction.match(/^\d+\./))
+        .map(instruction => instruction.replace(/^\d+\.\s*/, ''));
+
+      if (instructions.length > 0 && recipeTitles[index]) {
+        recipes.push({
+          name: recipeTitles[index],
+          instructions
+        });
+      }
+    });
+    
+    console.log("Parsed Recipes:", recipes); // Debug output
+    return recipes;
+  };
+
+  return (<>
+    <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg' id='input-window'>
       <div className="bg-ng w-2/6 h-3/4 rounded-3xl flex flex-col justify-start">
 
         {/*Ingredient input*/}
@@ -62,12 +161,14 @@ const IngredientInputWindow = () => {
 
         {/*Generate recipes button*/}
         <div className='flex flex-col items-center justify-center space-y-4 p-4'>
-          <button className='bg-dg rounded-lg p-2 text-white w-1/2'>
+          <button className='bg-dg rounded-lg p-2 text-white w-1/2' onClick={setStuff}>
             Generate Recipes
           </button>
           </div>
       </div>
     </div>
+    <RecipeGrid />
+    </>
   );
 };
 
