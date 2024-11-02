@@ -68,7 +68,7 @@ export default function Test() {
 
   return (
     <>
-      <input 
+      {/* <input 
         style={{ border: '2px solid black'}} 
         onChange={(e) => setPrompt(
           `Explain what recipes we can make with ${e.target.value} and can output the recipes in the format food (not in a list): {instructions in numbered list form}. Do not say anything else besides the formatted`
@@ -90,7 +90,7 @@ export default function Test() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

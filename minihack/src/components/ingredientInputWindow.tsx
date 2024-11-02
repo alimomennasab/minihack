@@ -5,11 +5,17 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import{ useState } from 'react';
 import { spec } from 'node:test/reporters';
+import RecipeGrid from "./recipeGrid";
+
 
 const IngredientInputWindow = () => {
   const [ingredients, setIngredients] = useState("");
   const [meal, setMeal] = useState("");
   const [special, setSpecial] = useState("");
+  const [recipeGrid, setRecipeGrid] = useState(false);
+  const toggleWindowGrid = () => {
+    setRecipeGrid(!recipeGrid);
+  };
 
   useEffect(() => {
     console.log(ingredients + " " + meal + " " + special)
@@ -18,7 +24,6 @@ const IngredientInputWindow = () => {
   return (
     <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg'>
       <div className="bg-ng w-2/6 h-3/4 rounded-3xl flex flex-col justify-start">
-
         {/*Ingredient input*/}
         <div className='flex flex-col items-center justify-center space-y-4  p-4'>
           <div className="mt-6 font-bold text-3xl text-white">
@@ -62,12 +67,16 @@ const IngredientInputWindow = () => {
 
         {/*Generate recipes button*/}
         <div className='flex flex-col items-center justify-center space-y-4 p-4'>
-          <button className='bg-dg rounded-lg p-2 text-white w-1/2'>
+          <button onClick={toggleWindowGrid} className='bg-dg rounded-lg p-2 text-white w-1/2'>
             Generate Recipes
           </button>
-          </div>
+          <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'> 
+          {recipeGrid && <RecipeGrid />} 
+      </div> 
+        </div>
       </div>
     </div>
+    
   );
 };
 
