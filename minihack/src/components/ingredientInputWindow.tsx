@@ -1,16 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import{ useState } from 'react';
-import { spec } from 'node:test/reporters';
-import RecipeGrid from './recipeGrid'
+//import RecipeGrid from './recipeGrid'
+import RecipeBox from './recipeBox';
+
 
 interface Recipe {
   name: string;
   instructions: string[];
 }
+
+const ingredients2 = ['chicken', 'rice', 'tomatoes', 'stuff', 'things', 'test', 'burger', 'fries'] as const;
 
 const IngredientInputWindow = () => {
   const [ingredients, setIngredients] = useState("");
@@ -20,8 +23,10 @@ const IngredientInputWindow = () => {
   const [prompt, setPrompt] = useState("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [toggle, setToggle] = useState(false);
-  const [counter, setCounter] = useState(0);
-  const [count2, setCount] = useState(0);
+  const [isFirstToggle, setIsFirstToggle] = useState(true);
+
+  const refInputWindow = useRef<HTMLDivElement>(null);
+  const refGridWindow = useRef<HTMLDivElement>(null);
 
   const inputOpen = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center', 'justify-center', 'bg-dg'];
   const inputClose = ['min-h-screen', 'h-screen', 'w-screen', 'flex', 'items-center','justify-center', 'bg-dg', 'hidden'];
@@ -32,10 +37,12 @@ const IngredientInputWindow = () => {
   const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_AI_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+  // prints current ai input
   useEffect(() => {
     console.log(ingredients + " " + meal + " " + special)
   }, [meal, ingredients, special])
 
+  // GETS PROMPT FROM AI
   useEffect(() => {
     console.log("YOUR MOM")
     const getResponse = async () => {
@@ -53,47 +60,49 @@ const IngredientInputWindow = () => {
     getResponse();
   }, [prompt]);
 
+  // TOGGLES BETWEEN INGREDIENT INPUT WINDOW AND RECIPE GRID
   useEffect(() => {
-    if (counter == 0) {
-
+    if (isFirstToggle) {
+      setIsFirstToggle(false);
     } else if (toggle == true) {
         for (let i = 0; i < inputOpen.length; i++) {
-          document.getElementById("input-window")?.classList.remove(inputOpen[i]);
+          refInputWindow.current?.classList.remove(inputOpen[i]);
         }
         for (let i = 0; i < inputClose.length; i++) {
-          document.getElementById("input-window")?.classList.add(inputClose[i]);
+          refInputWindow.current?.classList.add(inputClose[i]);
         }
         for (let i = 0; i < gridClose.length; i++) {
-          document.getElementById("grid-window")?.classList.remove(gridClose[i]);
+          refGridWindow.current?.classList.remove(gridClose[i]);
         }
         for (let i = 0; i < gridOpen.length; i++) {
-          document.getElementById("input-window")?.classList.remove(gridOpen[i]);
+          refGridWindow.current?.classList.add(gridOpen[i]);
         }
     } else {
       for (let i = 0; i < inputClose.length; i++) {
-        document.getElementById("input-window")?.classList.remove(inputClose[i]);
+        refInputWindow.current?.classList.remove(inputClose[i]);
       }
       for (let i = 0; i < inputOpen.length; i++) {
-        document.getElementById("input-window")?.classList.add(inputOpen[i]);
+        refInputWindow.current?.classList.add(inputOpen[i]);
       }
       for (let i = 0; i < gridOpen.length; i++) {
-        document.getElementById("grid-window")?.classList.remove(gridOpen[i]);
+        refGridWindow.current?.classList.remove(gridOpen[i]);
       }
       for (let i = 0; i < gridClose.length; i++) {
-        document.getElementById("input-window")?.classList.remove(gridClose[i]);
+        refGridWindow.current?.classList.add(gridClose[i]);
       }
-      setCount(count2+1)
     }
-  }, [toggle, counter])
+  }, [toggle])
 
-  useEffect(() => {
-    setCounter(counter + 1);
-  }, [count2])
+
 
   function setStuff() {
     setPrompt(
       `Explain what ${special} ${meal} recipes we can make with ${ingredients} and can output the recipes in the format food (not in a list): {instructions in numbered list form}. Do not say anything else besides the formatted`
     );
+    setToggle(!toggle);
+  }
+
+  function setStuffLite() {
     setToggle(!toggle);
   }
 
@@ -132,7 +141,7 @@ const IngredientInputWindow = () => {
   };
 
   return (<>
-    <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg' id='input-window'>
+    <div className='min-h-screen h-screen w-screen flex items-center justify-center bg-dg' id='input-window' ref={refInputWindow}>
       <div className="bg-ng w-2/6 h-3/4 rounded-3xl flex flex-col justify-start">
 
         {/*Ingredient input*/}
@@ -184,7 +193,29 @@ const IngredientInputWindow = () => {
           </div>
       </div>
     </div>
-    <RecipeGrid />
+
+    <div className='min-h-screen h-screen w-screen flex flex-col items-center justify-center bg-[#465B43] hidden' id='grid-window' ref={refGridWindow}>
+      {/* Title & Ingredients list */}
+      <div className='text-black text-5xl mb-4'>
+        Generated Recipes
+      </div>
+      <div className='text-white italic p-4'>
+        Made with {ingredients2.join(', ')}
+      </div>
+      {/* Grid */}
+      <div className="w-3/4 h-3/5 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20">
+          {ingredients2.map((ingredient, index) => (
+            <RecipeBox key={index} />
+          ))}
+        </div>
+      </div>
+      <div className='flex flex-col items-center justify-center space-y-4 p-4'>
+          <button className='bg-dg rounded-lg p-2 text-white w-1/2' onClick={setStuffLite}>
+            Go Back
+          </button>
+          </div>
+    </div>
     </>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
-import React from 'react';
+import React, { forwardRef } from 'react';
 import RecipeBox from './recipeBox';
 
 interface Recipe {
@@ -11,7 +11,7 @@ interface Recipe {
 
 const ingredients = ['chicken', 'rice', 'tomatoes', 'stuff', 'things', 'test', 'burger', 'fries'] as const;
 
-const RecipeGrid = () => {
+const RecipeGrid = forwardRef((props, ref) => {
   return (
     <div className='min-h-screen h-screen w-screen flex flex-col items-center justify-center bg-[#465B43] hidden' id='grid-window'>
       {/* Title & Ingredients list */}
@@ -31,6 +31,6 @@ const RecipeGrid = () => {
       </div>
     </div>
   );
-};
+});
 
 export default RecipeGrid;
