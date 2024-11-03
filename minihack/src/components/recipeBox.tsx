@@ -2,8 +2,12 @@
 import React, { useState } from 'react';
 import RecipeWindow from './recipeWindow';
 
+interface Recipe {
+  name: string;
+  instructions: string[];
+}
 
-const RecipeBox = () => {
+const RecipeBox = (recipe: Recipe) => {
 
   const [recipeWindow, setRecipeWindow] = useState(false);
   

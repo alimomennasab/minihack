@@ -5,15 +5,38 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import{ useState } from 'react';
 //import RecipeGrid from './recipeGrid'
-import RecipeBox from './recipeBox';
+// import RecipeBox from './recipeBox';
+import RecipeWindow from './recipeWindow';
 
 
+// Recipe Interface
 interface Recipe {
   name: string;
   instructions: string[];
 }
 
-const ingredients2 = ['chicken', 'rice', 'tomatoes', 'stuff', 'things', 'test', 'burger', 'fries'] as const;
+// RecipeBox Component
+const RecipeBox: React.FC<Recipe> = ({name, instructions}) => {
+
+  const [recipeWindow, setRecipeWindow] = useState(false);
+  
+  const toggleWindow = () => {
+    setRecipeWindow(!recipeWindow);
+  };
+
+  return (
+    <div onClick={toggleWindow}>
+      <div className="h-60 w-56 box-border size-full border-2 rounded-xl text-black border-black bg-yellow-50">
+        <div className="pt-4 pb-4 text-center font-black font-serif text-black">{name}</div>
+        <div className="pb-1 my-auto w-54 content-center border-t-2 border-black"></div>
+        <div className="pt-2 px-4 overflow-y-auto h-40">{instructions}</div>
+      </div>    
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'> 
+        {recipeWindow && <RecipeWindow />} 
+      </div>  
+    </div>
+  );
+};
 
 const IngredientInputWindow = () => {
   const [ingredients, setIngredients] = useState("");
@@ -78,18 +101,18 @@ const IngredientInputWindow = () => {
           refGridWindow.current?.classList.add(gridOpen[i]);
         }
     } else {
-      for (let i = 0; i < inputClose.length; i++) {
-        refInputWindow.current?.classList.remove(inputClose[i]);
-      }
-      for (let i = 0; i < inputOpen.length; i++) {
-        refInputWindow.current?.classList.add(inputOpen[i]);
-      }
-      for (let i = 0; i < gridOpen.length; i++) {
-        refGridWindow.current?.classList.remove(gridOpen[i]);
-      }
-      for (let i = 0; i < gridClose.length; i++) {
-        refGridWindow.current?.classList.add(gridClose[i]);
-      }
+        for (let i = 0; i < inputClose.length; i++) {
+          refInputWindow.current?.classList.remove(inputClose[i]);
+        }
+        for (let i = 0; i < inputOpen.length; i++) {
+          refInputWindow.current?.classList.add(inputOpen[i]);
+        }
+        for (let i = 0; i < gridOpen.length; i++) {
+          refGridWindow.current?.classList.remove(gridOpen[i]);
+        }
+        for (let i = 0; i < gridClose.length; i++) {
+          refGridWindow.current?.classList.add(gridClose[i]);
+        }
     }
   }, [toggle])
 
@@ -97,7 +120,7 @@ const IngredientInputWindow = () => {
 
   function setStuff() {
     setPrompt(
-      `Explain what ${special} ${meal} recipes we can make with ${ingredients} and can output the recipes in the format food (not in a list): {instructions in numbered list form}. Do not say anything else besides the formatted`
+      `Explain what ${special} ${meal} recipes we can make with ${ingredients} and can output the recipes in the format: dish title (bolded) (not in a list): {instructions in numbered list form}. Do not say anything else besides the formatted`
     );
     setToggle(!toggle);
   }
@@ -200,13 +223,13 @@ const IngredientInputWindow = () => {
         Generated Recipes
       </div>
       <div className='text-white italic p-4'>
-        Made with {ingredients2.join(', ')}
+        {/* Made with {recipes.join(', ')} */}
       </div>
       {/* Grid */}
       <div className="w-3/4 h-3/5 rounded-lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20">
-          {ingredients2.map((ingredient, index) => (
-            <RecipeBox key={index} />
+          {recipes.map((recipe, index) => (
+            <RecipeBox key={index} name={recipe.name} instructions={recipe.instructions} />
           ))}
         </div>
       </div>

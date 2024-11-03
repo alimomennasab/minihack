@@ -23,13 +23,13 @@ const RecipeGrid = forwardRef((props, ref) => {
       </div>
       {/* Grid */}
       <div className="w-3/4 h-3/5 rounded-lg">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20">
           {ingredients.map((ingredient, index) => (
-            <RecipeBox key={index} />
-          ))}
+            <RecipeBox key={index} recipe={ingredient}/>
+          ))} */}
         </div>
       </div>
-    </div>
+    // </div>
   );
 });
 
