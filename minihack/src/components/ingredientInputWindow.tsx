@@ -210,11 +210,11 @@ const IngredientInputWindow = () => {
           ))}
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center space-y-4 p-4'>
-          <button className='bg-dg rounded-lg p-2 text-white w-1/2' onClick={setStuffLite}>
+      <div className='flex flex-col items-center self-start space-y-4 p-4'>
+          <button className='bg-ng rounded-lg p-2 text-black w-1/2 border-black border-2 w-auto hover:bg-sky-500' onClick={setStuffLite}>
             Go Back
           </button>
-          </div>
+      </div>
     </div>
     </>
   );
